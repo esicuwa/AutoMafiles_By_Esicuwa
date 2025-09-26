@@ -79,7 +79,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
             }
 
             await Task.WhenAll(tasks);
-
+            ///
             Console.WriteLine("Все процессы завершены.");
             Console.ReadLine();
 
