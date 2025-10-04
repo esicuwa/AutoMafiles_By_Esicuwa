@@ -328,7 +328,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                             RefreshToken = pollResponse.RefreshToken,
                         };
 
-                        await mailCheckerMafile.LoadLastProcessedUidAsync(data_account, Imap, local_port_t); 
+                        await mailCheckerMafile.LoadLastProcessedUidAsync(data_account, Imap, local_port_t);
 
                         Console.WriteLine($"[{Login_log}] Вход в Steam успешен. Начинаю привязку мобильного аутентификатора...");
 
@@ -589,7 +589,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                 semaphore.Release();
 
                 string loginForLog = !string.IsNullOrEmpty(Login_log) ? Login_log : "Unknown";
-                Console.WriteLine($" [{loginForLog}] Завершён поток.");
+                Console.WriteLine($"[{loginForLog}] Завершён поток.");
             }
         }
 
