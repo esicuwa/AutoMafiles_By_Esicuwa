@@ -332,15 +332,14 @@ namespace AutoMafiles_By_Esicuwa.Tools
                         var doc = new HtmlAgilityPack.HtmlDocument();
                         doc.LoadHtml(htmlBody);
 
-                        var linkNode = doc.DocumentNode.SelectSingleNode(
+                        var CodeNode = doc.DocumentNode.SelectSingleNode(
                             "//td[contains(@class, 'title-48') and contains(@class, 'c-blue1') and contains(@class, 'fw-b') and contains(@class, 'a-center')]");
 
-                        if (linkNode != null)
+                        if (CodeNode != null)
                         {
-                            var link = linkNode.InnerText;
-                            var correctedLink = link.Replace("&amp;", "&");
+                            var code = CodeNode.InnerText;
 
-                            Console.WriteLine($"[{Login}] Найдена новый код: " + link.Trim().Replace("\n"," "));
+                            Console.WriteLine($"[{Login}] Найдена новый код: " + code.Trim().Replace("\n"," "));
                             bool success = false;
                             await Task.Delay(new Random().Next(5000, 10000));
                             await inbox.AddFlagsAsync(uid, MessageFlags.Seen, true); 
@@ -349,20 +348,19 @@ namespace AutoMafiles_By_Esicuwa.Tools
                             await client.DisconnectAsync(true);
                             return new ResultData { 
                                 Success = true,
-                                Message = link.Trim().Replace("\n", " ")
+                                Message = code.Trim().Replace("\n", " ")
 
                             };
                         }
                         else
                         {
-                            linkNode = doc.DocumentNode.SelectSingleNode(
+                            CodeNode = doc.DocumentNode.SelectSingleNode(
                             "//td[contains(@class, 'x_title-48') and contains(@class, 'x_c-blue1') and contains(@class, 'x_fw-b') and contains(@class, 'x_a-center')]");
-                            if (linkNode != null)
+                            if (CodeNode != null)
                             {
-                                var link = linkNode.InnerText;
-                                var correctedLink = link.Replace("&amp;", "&");
+                                var code = CodeNode.InnerText;
 
-                                Console.WriteLine($"[{Login}] Найдена новый код: " + link.Trim().Replace("\n", " "));
+                                Console.WriteLine($"[{Login}] Найдена новый код: " + code.Trim().Replace("\n", " "));
                                 bool success = false;
                                 await Task.Delay(new Random().Next(5000, 10000));
                                 await inbox.AddFlagsAsync(uid, MessageFlags.Seen, true); 
@@ -371,7 +369,7 @@ namespace AutoMafiles_By_Esicuwa.Tools
                                 return new ResultData
                                 {
                                     Success = true,
-                                    Message = link.Trim().Replace("\n", " ")
+                                    Message = code.Trim().Replace("\n", " ")
 
                                 };
                             }
