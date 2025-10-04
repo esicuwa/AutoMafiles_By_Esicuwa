@@ -1,7 +1,7 @@
 # AutoMafiles By Esicuwa
 
-[![English](https://img.shields.io/badge/Language-English-blue)](README_EN.md)
-[![Русский](https://img.shields.io/badge/Язык-Русский-red)](README.md)
+[![English](https://img.shields.io/badge/Language-English-blue)](README.md)
+[![Русский](https://img.shields.io/badge/Язык-Русский-red)](README_RU.md)
 
 Automated program for mass binding of mobile authenticator to Steam accounts.
 
