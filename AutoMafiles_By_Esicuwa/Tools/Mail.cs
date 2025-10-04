@@ -343,7 +343,7 @@ namespace AutoMafiles_By_Esicuwa.Tools
                             Console.WriteLine($"[{Login}] Найдена новый код: " + link.Trim().Replace("\n"," "));
                             bool success = false;
                             await Task.Delay(new Random().Next(5000, 10000));
-                            await inbox.AddFlagsAsync(uid, MessageFlags.Seen, true); /
+                            await inbox.AddFlagsAsync(uid, MessageFlags.Seen, true); 
 
 
                             await client.DisconnectAsync(true);
