@@ -3,41 +3,41 @@
 [![English](https://img.shields.io/badge/Language-English-blue)](README_EN.md)
 [![Русский](https://img.shields.io/badge/Язык-Русский-red)](README.md)
 
-Автоматизированная программа для массовой привязки мобильного аутентификатора к аккаунтам Steam.
+Automated program for mass binding of mobile authenticator to Steam accounts.
 
-## Описание
+## Description
 
-Программа автоматически привязывает мобильный аутентификатор Steam к аккаунтам, обрабатывая письма с кодами подтверждения и создавая файлы `.maFile` для использования в SDA(Steam Desktop Authenticator) или других совместимых приложениях.
+The program automatically binds Steam mobile authenticator to accounts, processing confirmation emails and creating `.maFile` files for use in SDA (Steam Desktop Authenticator) or other compatible applications.
 
-## Возможности
+## Features
 
-- ✅ Автоматическая привязка мобильного аутентификатора Steam
-- ✅ Поддержка различных форматов аккаунтов (стандартный, с IMAP паролем, Outlook)
-- ✅ Работа через прокси-серверы
-- ✅ Многопоточная обработка аккаунтов
-- ✅ Автоматическое получение кодов подтверждения из email
-- ✅ Создание файлов `.maFile` для каждого аккаунта
-- ✅ Подробное логирование процесса
-- 🔜 Удаление .maFile с аккаунта
+- ✅ Automatic Steam mobile authenticator binding
+- ✅ Support for various account formats (standard, with IMAP password, Outlook)
+- ✅ Working through proxy servers
+- ✅ Multi-threaded account processing
+- ✅ Automatic confirmation code retrieval from email
+- ✅ Creating `.maFile` files for each account
+- ✅ Detailed process logging
+- 🔜 Removing .maFile from account
 
-## Системные требования
+## System Requirements
 
 - Windows 10/11
 - .NET 8.0 Runtime
-- Доступ к интернету
-- Резиденские Прокси-серверы 
+- Internet access
+- Residential Proxy servers
 
-## Установка
+## Installation
 
-1. Скачайте последнюю версию программы из раздела [Releases](../../releases)
-2. Распакуйте архив в любую папку
-3. Убедитесь, что установлен .NET 8.0 Runtime
+1. Download the latest version of the program from the [Releases](../../releases) section
+2. Extract the archive to any folder
+3. Make sure .NET 8.0 Runtime is installed
 
-## Настройка
+## Configuration
 
-### 1. Создание файла конфигурации
+### 1. Creating configuration file
 
-Конфигурация происходит через файл `config.json` в папке с программой:
+Configuration is done through the `config.json` file in the program folder:
 
 ```json
 {
@@ -50,104 +50,103 @@
 }
 ```
 
-### 2. Параметры конфигурации
+### 2. Configuration parameters
 
-- **Threads** - количество одновременных потоков (рекомендуется 1-5)
-- **Attempts** - количество попыток для каждого аккаунта
-- **Imap** - IMAP сервер для получения писем
-- **Format** - формат аккаунтов (0-3, см. раздел "Форматы аккаунтов")
-- **Proxy_Path** - путь к файлу с прокси-серверами
-- **Accounts_Path** - путь к файлу с аккаунтами
+- **Threads** - number of concurrent threads (recommended 1-5)
+- **Attempts** - number of attempts for each account
+- **Imap** - IMAP server for receiving emails
+- **Format** - account format (0-3, see "Account Formats" section)
+- **Proxy_Path** - path to proxy servers file
+- **Accounts_Path** - path to accounts file
 
-### 3. Подготовка файлов
+### 3. File preparation
 
-#### Файл с прокси-серверами (`proxies.txt`)
+#### Proxy servers file (`proxies.txt`)
 ```
 user:pass@host:port
 user2:pass2@host2:port2
 ```
 
-#### Файл с аккаунтами (`accounts.txt`)
-Формат зависит от выбранного типа (см. раздел "Форматы аккаунтов")
+#### Accounts file (`accounts.txt`)
+Format depends on the selected type (see "Account Formats" section)
 
-## Форматы аккаунтов
+## Account Formats
 
-### Формат 0 - Стандартный
+### Format 0 - Standard
 ```
 login:password:email:email_password
 ```
 
-### Формат 1 - С IMAP паролем
+### Format 1 - With IMAP password
 ```
 login:password:email:email_password:imap_password
 ```
 
-### Формат 2 - Outlook
+### Format 2 - Outlook
 ```
 login:password:email:email_password:refresh_token:client_id
 ```
 
-### Формат 3 - Outlook без пароля
+### Format 3 - Outlook without password
 ```
 login:password:email:refresh_token:client_id
 ```
 
-## Запуск программы
+## Running the program
 
-1. Убедитесь, что все файлы настроены правильно
-2. Запустите `AutoMafiles_By_Esicuwa.exe`
-3. Программа начнет обработку аккаунтов
+1. Make sure all files are configured correctly
+2. Run `AutoMafiles_By_Esicuwa.exe`
+3. The program will start processing accounts
 
-## Результаты работы
+## Results
 
-Программа создает папку `result/MafileAdd/[timestamp]/` со следующими файлами:
+The program creates a folder `result/MafileAdd/[timestamp]/` with the following files:
 
-- **result.txt** - успешно обработанные аккаунты с кодами отмены привязки
-- **error.txt** - аккаунты с ошибками и кодами ошибок
-- **maFiles/** - папка с файлами `.maFile` для каждого аккаунта
+- **result.txt** - successfully processed accounts with unbinding codes
+- **error.txt** - accounts with errors and error codes
+- **maFiles/** - folder with `.maFile` files for each account
 
-## Коды ошибок
+## Error Codes
 
-- **1001** - Неверный формат прокси
-- **1002** - Неверный формат аккаунта
-- **1003** - Ошибка подключения к IMAP
-- **1004** - Ошибка входа в аккаунт
-- **2001** - Ошибка при проверке аутентификации
-- **2002** - Ошибка при добавлении аутентификатора
-- **2003** - Требуется ввод номера телефона
-- **2004** - Не удалось добавить номер телефона
-- **2005** - Ошибка при добавлении аутентификатора
-- **2006** - Аутентификатор уже привязан
-- **3001** - Неверный код привязки
-- **3002** - Не удалось сгенерировать правильные коды
-- **3003** - Ошибка при завершении привязки
-- **3004** - Не удалось сохранить файл аутентификатора
-- **3005** - Ошибка подключения к серверам Steam
+- **1001** - Invalid proxy format
+- **1002** - Invalid account format
+- **1003** - IMAP connection error
+- **1004** - Account login error
+- **2001** - Authentication verification error
+- **2002** - Error adding authenticator
+- **2003** - Phone number input required
+- **2004** - Failed to add phone number
+- **2005** - Error adding authenticator
+- **2006** - Authenticator already bound
+- **3001** - Invalid binding code
+- **3002** - Failed to generate correct codes
+- **3003** - Error completing binding
+- **3004** - Failed to save authenticator file
+- **3005** - Steam servers connection error
 
-## Использование созданных .maFile
+## Using created .maFile
 
-Созданные файлы `.maFile` можно использовать в:
+Created `.maFile` files can be used in:
 - Steam Desktop Authenticator
-- Других совместимых приложениях
+- Other compatible applications
 
-## Безопасность
+## Security
 
-⚠️ **ВАЖНО**: 
-- При ошибках не связанных с аккаунтами - обращайтесь к разработчику
+⚠️ **IMPORTANT**: 
+- For errors not related to accounts - contact the developer
 
+## Support
 
-## Поддержка
+If you encounter problems:
+1. Check the configuration settings
+2. Make sure the account and proxy formats are correct
+3. Check IMAP server availability
+4. Make sure proxy servers are working
 
-При возникновении проблем:
-1. Проверьте правильность настройки конфигурации
-2. Убедитесь в корректности формата аккаунтов и прокси
-3. Проверьте доступность IMAP сервера
-4. Убедитесь в работоспособности прокси-серверов
+## License
 
-## Лицензия
+See [LICENSE.txt](LICENSE.txt) file
 
-См. файл [LICENSE.txt](LICENSE.txt)
-
-## Автор
+## Author
 
 esicuwa
