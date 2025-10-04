@@ -207,14 +207,14 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                         try
                         {
 
-                            var proxies_data = proxy_t.Split(':');
+                            var proxies_data = proxy_t.Split('@');
 
                             opt = new ProxyOptions
                             {
-                                ProxyHost = $"{proxies_data[0]}",
-                                ProxyPort = Convert.ToInt32(proxies_data[1]),
-                                ProxyUser = $"{proxies_data[2]}",
-                                ProxyPass = $"{proxies_data[3]}",
+                                ProxyHost = $"{proxies_data[1].Split(':')[0]}",
+                                ProxyPort = Convert.ToInt32(proxies_data[1].Split(':')[1]),
+                                ProxyUser = $"{proxies_data[0].Split(':')[0]}",
+                                ProxyPass = $"{proxies_data[0].Split(':')[1]}",
                                 LocalPort = local_port_t
 
                             };
