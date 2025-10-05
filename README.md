@@ -153,6 +153,9 @@ See [LICENSE.txt](LICENSE.txt) file
 
 esicuwa
 
+special thanks to the channel [svinofermacs2](https://t.me/svinofermacs2) for promoting the repository
+
+
 ## Donate
 
 **TRX:** TH6SYMSiavPKFc8HBD6Kr3KtXwrCeaFgaj
