@@ -67,6 +67,8 @@ user:pass@host:port
 user2:pass2@host2:port2
 ```
 
+**Где взять прокси-серверы:** [The Node Proxy Bot](https://t.me/node_proxy_bot?start=84411615) - Telegram бот для покупки резидентских прокси-серверов.
+
 #### Файл с аккаунтами (`accounts.txt`)
 Формат зависит от выбранного типа (см. раздел "Форматы аккаунтов")
 
