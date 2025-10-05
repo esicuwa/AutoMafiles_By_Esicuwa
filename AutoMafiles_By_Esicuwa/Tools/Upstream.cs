@@ -91,7 +91,6 @@ namespace AutoMafiles_By_Esicuwa.Tools
             {
                 server = new TcpClient();
 
-                // Увеличиваем таймаут подключения
                 server.ReceiveTimeout = 10000;
                 server.SendTimeout = 10000;
 
