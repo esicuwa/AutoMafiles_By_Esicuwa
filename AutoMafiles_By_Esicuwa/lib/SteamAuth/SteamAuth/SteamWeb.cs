@@ -10,11 +10,12 @@ namespace SteamAuth
     {
         public static string MOBILE_APP_USER_AGENT = "Dalvik/2.1.0 (Linux; U; Android 9; Valve Steam App Version/3)";
 
-        public static async Task<string> GETRequest(string url, CookieContainer cookies)
+        public static async Task<string> GETRequest(string url, CookieContainer cookies, string proxyHost, int proxyPort)
         {
             string response;
             using (CookieAwareWebClient wc = new CookieAwareWebClient())
             {
+                wc.Proxy = new WebProxy(proxyHost, proxyPort);
                 wc.Encoding = Encoding.UTF8;
                 wc.CookieContainer = cookies;
                 wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MOBILE_APP_USER_AGENT;
@@ -23,7 +24,7 @@ namespace SteamAuth
             return response;
         }
 
-        public static async Task<string> POSTRequest(string url, CookieContainer cookies, NameValueCollection body)
+        public static async Task<string> POSTRequest(string url, CookieContainer cookies, NameValueCollection body, string proxyHost, int proxyPort)
         {
             if (body == null)
                 body = new NameValueCollection();
@@ -31,6 +32,7 @@ namespace SteamAuth
             string response;
             using (CookieAwareWebClient wc = new CookieAwareWebClient())
             {
+                wc.Proxy = new WebProxy(proxyHost, proxyPort);
                 wc.Encoding = Encoding.UTF8;
                 wc.CookieContainer = cookies;
                 wc.Headers[HttpRequestHeader.UserAgent] = SteamWeb.MOBILE_APP_USER_AGENT;

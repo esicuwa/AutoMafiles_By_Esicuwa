@@ -47,18 +47,4 @@ namespace SteamAuth
         }
     }
 
-    public class ConfirmationsResponse
-    {
-        [JsonProperty("success")]
-        public bool Success { get; set; }
-
-        [JsonProperty("message")]
-        public string Message { get; set; }
-
-        [JsonProperty("needauth")]
-        public bool NeedAuthentication { get; set; }
-
-        [JsonProperty("conf")]
-        public Confirmation[] Confirmations { get; set; }
-    }
 }

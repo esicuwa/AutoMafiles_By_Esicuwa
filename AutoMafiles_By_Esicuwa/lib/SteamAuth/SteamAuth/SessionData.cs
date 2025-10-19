@@ -18,6 +18,8 @@ namespace SteamAuth
 
         public string SessionID { get; set; }
 
+        public string ProxyAddres = null;
+        public int ProxyPort = 0;
         /// <summary>
         /// Refresh your access token, optionally also getting a new refresh token
         /// </summary>
@@ -39,7 +41,7 @@ namespace SteamAuth
                 postData.Add("refresh_token", this.RefreshToken);
                 postData.Add("steamid", this.SteamID.ToString());
                 postData.Add("renewal_type", allowRenewal ? "1" : "0");
-                responseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/", null, postData);
+                responseStr = await SteamWeb.POSTRequest("https://api.steampowered.com/IAuthenticationService/GenerateAccessTokenForApp/v1/", null, postData, ProxyAddres, ProxyPort);
             }
             catch (Exception ex)
             {

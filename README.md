@@ -7,7 +7,7 @@ Automated program for mass binding of mobile authenticator to Steam accounts.
 
 ## Description
 
-The program automatically binds Steam mobile authenticator to accounts, processing confirmation emails and creating `.maFile` files for use in SDA (Steam Desktop Authenticator) or other compatible applications.
+The program automatically binds and removed Steam mobile authenticator to accounts, processing confirmation emails and creating `.maFile` files for use in SDA (Steam Desktop Authenticator) or other compatible applications.
 
 ## Features
 
@@ -18,7 +18,7 @@ The program automatically binds Steam mobile authenticator to accounts, processi
 - ✅ Automatic confirmation code retrieval from email
 - ✅ Creating `.maFile` files for each account
 - ✅ Detailed process logging
-- 🔜 Removing .maFile from account
+- ✅ Removing .maFile from account
 
 ## System Requirements
 
@@ -41,23 +41,31 @@ Configuration is done through the `config.json` file in the program folder:
 
 ```json
 {
+    "Type": 0,
     "Threads": 3,
     "Attempts": 3,
     "Imap": "imap.firstmail.ltd",
     "Format": 0,
     "Proxy_Path": "C:\\path\\to\\proxies.txt",
-    "Accounts_Path": "C:\\path\\to\\accounts.txt"
+    "Accounts_Path": "C:\\path\\to\\accounts.txt",
+    "MaFile_Path": "C:\\path\\to\\maFiles"
 }
 ```
 
 ### 2. Configuration parameters
 
+- **Type** — type of usage (0 for binding) (1 for unbinding) of mafiles
 - **Threads** - number of concurrent threads (recommended 1-5)
 - **Attempts** - number of attempts for each account
 - **Imap** - IMAP server for receiving emails
 - **Format** - account format (0-3, see "Account Formats" section)
 - **Proxy_Path** - path to proxy servers file
 - **Accounts_Path** - path to accounts file
+- **MaFile_Path** - path to Mafile fouder
+
+To unlink mafiles, you only need the maFile_Path and Proxy_Path when Type 1 is specified.
+
+After unlinking, the mobile authenticator will be removed and an email authenticator will be installed.
 
 ### 3. File preparation
 
@@ -152,6 +160,9 @@ See [LICENSE.txt](LICENSE.txt) file
 ## Author
 
 esicuwa
+
+special thanks to the channel [svinofermacs2](https://t.me/svinofermacs2) for promoting the repository
+
 
 ## Donate
 

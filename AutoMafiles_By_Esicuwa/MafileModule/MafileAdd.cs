@@ -36,7 +36,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
     internal class MafileAdd
     {
-        private static string ConfigFilePath = Path.Combine(Directory.GetCurrentDirectory(), "config.json");
+        private static string ConfigFilePath = GetExecutableDir() + "/config.json";
         private static readonly object fileLock = new object();
         private static SemaphoreSlim semaphore;
         private static string Imap;
@@ -86,7 +86,10 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
             Console.ReadLine();
 
         }
-
+        public static string GetExecutableDir()
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        }
 
         static async Task MafAdd(string Account)
         {
@@ -332,7 +335,8 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
                         Console.WriteLine($"[{Login_log}] Вход в Steam успешен. Начинаю привязку мобильного аутентификатора...");
 
-                        AuthenticatorLinker linker = new AuthenticatorLinker(sessionData,config);
+                        AuthenticatorLinker linker = new AuthenticatorLinker(sessionData,config, "127.0.0.1", local_port_t);
+
                         AuthenticatorLinker.LinkResult linkResponse = AuthenticatorLinker.LinkResult.GeneralFailure;
 
                         errors = 0;
