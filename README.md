@@ -75,7 +75,7 @@ user:pass@host:port
 user2:pass2@host2:port2
 ```
 
-**Where to get proxy servers:** [The Node Proxy Bot](https://t.me/node_proxy_bot?start=84411615) - Telegram bot for purchasing residential proxy servers.
+**Where to get cheap and high-quality proxy servers:** [The Node Proxy Bot](https://t.me/node_proxy_bot?start=84411615) - Telegram bot for purchasing cheap and high-quality residential proxy servers, the price for 1 GB starts from $0.75.
 
 #### Accounts file (`accounts.txt`)
 Format depends on the selected type (see "Account Formats" section)
