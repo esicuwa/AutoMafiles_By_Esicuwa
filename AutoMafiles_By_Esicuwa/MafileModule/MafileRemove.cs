@@ -144,7 +144,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                         }
                         else
                         {
-                            Console.WriteLine("Ошибка удаления аунтификатора");
+                            throw new CustomException($"Ошибка удаления аунтификатора", 4000);
                         }
 
                     }
