@@ -18,15 +18,14 @@ namespace SteamAuth
 
         public string SessionID { get; set; }
 
-        public string ProxyAddres = null;
-        public int ProxyPort = 0;
+        
         /// <summary>
         /// Refresh your access token, optionally also getting a new refresh token
         /// </summary>
         /// <param name="allowRenewal">Allow getting a new refresh token as well. If one is returned, this.RefreshToken will be overwritten. You must save this new token!</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task RefreshAccessToken(bool allowRenewal = false)
+        public async Task RefreshAccessToken(string ProxyAddres, int ProxyPort, bool allowRenewal = false)
         {
             if (string.IsNullOrEmpty(this.RefreshToken))
                 throw new Exception("Refresh token is empty");

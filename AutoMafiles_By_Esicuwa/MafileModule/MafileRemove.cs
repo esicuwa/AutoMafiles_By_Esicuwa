@@ -131,7 +131,32 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                             throw new CustomException($" Неверный формат прокси", 1001);
                         }
 
+
+                        // Методы обновления токенов
+                        if (account.Session.IsRefreshTokenExpired())
+                        {
+
+                        }
+                        else
+                        {
+                            throw new CustomException($"Сессия недействительна. Обновите mafile", 4001);
+
+                        }
+
+                        if (account.Session.IsAccessTokenExpired())
+                        {
+                            try
+                            {
+                                await account.Session.RefreshAccessToken("127.0.0.1", local_port_t);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new CustomException($"Ошибка обновления токена.", 4002);
+                            }
+                        }
+
                         bool success = await account.DeactivateAuthenticator(2, "127.0.0.1", local_port_t);
+
                         if (success)
                         {
 
