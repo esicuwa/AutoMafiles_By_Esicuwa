@@ -133,7 +133,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
 
                         // Методы обновления токенов
-                        if (account.Session.IsRefreshTokenExpired())
+                        if (!account.Session.IsRefreshTokenExpired())
                         {
 
                         }
@@ -143,7 +143,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
                         }
 
-                        if (account.Session.IsAccessTokenExpired())
+                        if (!account.Session.IsAccessTokenExpired())
                         {
                             try
                             {
