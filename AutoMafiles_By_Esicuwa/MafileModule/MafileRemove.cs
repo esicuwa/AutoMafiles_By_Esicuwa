@@ -183,7 +183,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                                         IsPersistentSession = false,
                                         PlatformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
                                         ClientOSType = EOSType.Android9,
-                                        Authenticator = new IAuthenticator()
+                                        Authenticator = new UserAuthenticator(account.SharedSecret)
 
                                     });
 
@@ -298,4 +298,40 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
         }
     }
 
+    public class UserAuthenticator : IAuthenticator
+    {
+
+
+        public UserAuthenticator(string SharedSecret_)
+        {
+            _SharedSecret = SharedSecret_;
+        }
+
+        public string _SharedSecret { get; set; }
+        
+
+
+
+        /// <inheritdoc />
+        public Task<string> GetDeviceCodeAsync(bool previousCodeWasIncorrect)
+        {
+            var account = new SteamGuardAccount { SharedSecret = _SharedSecret };
+            var loginCode = account.GenerateSteamGuardCode();
+
+            return Task.FromResult(loginCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<string> GetEmailCodeAsync(string email, bool previousCodeWasIncorrect)
+        {
+            
+            return await Task.FromResult("false");
+        }
+
+        /// <inheritdoc />
+        public Task<bool> AcceptDeviceConfirmationAsync()
+        {
+            return Task.FromResult(false);
+        }
+    }
 }
