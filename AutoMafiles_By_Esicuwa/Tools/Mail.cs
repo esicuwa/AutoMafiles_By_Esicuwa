@@ -147,10 +147,10 @@ namespace AutoMafiles_By_Esicuwa.Tools
                 return false;
             }
         }
-        public async Task<ResultData> CheckMailAsync(object Account, string imapServer, int localPort)
+        public async Task<ResultData> CheckMailAsync(object Account, string imapServer, int localPort, int Timeout = 1)
         {
             string newAccessToken = null;
-            var timeout = TimeSpan.FromMinutes(1);
+            var timeout = TimeSpan.FromMinutes(Timeout);
             var pollingInterval = TimeSpan.FromSeconds(10);
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             OAuthHelper? oauthHelper;

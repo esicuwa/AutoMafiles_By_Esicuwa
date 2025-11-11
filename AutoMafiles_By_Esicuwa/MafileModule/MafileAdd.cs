@@ -48,6 +48,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
         static string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "result", "MafileAdd", currentMilliseconds.ToString());
         static string resultPath = Path.Combine(directoryPath, "result.txt");
         static string errorPath = Path.Combine(directoryPath, "error.txt");
+        private static int _Timeout = 1;
 
         static public async Task RunAddMafile()
         {
@@ -65,6 +66,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
             string jsonContent = File.ReadAllText(ConfigFilePath);
             JObject config = JObject.Parse(jsonContent);
 
+            _Timeout = config["Timeout"].ToObject<int>();
             Imap = config["Imap"].ToString();
             List<string> DataAccounts = File.ReadAllLines(config["Accounts_Path"].ToString()).ToList();
             proxies = File.ReadAllLines(config["Proxy_Path"].ToString()).ToList();
@@ -398,7 +400,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
                         Console.WriteLine($"[{Login_log}] Аутентификатор привязан. Ожидаю письмо с кодом для окончания привязки.");
 
-                        var auth_status = await mailCheckerMafile.CheckMailAsync(data_account, Imap, local_port_t);
+                        var auth_status = await mailCheckerMafile.CheckMailAsync(data_account, Imap, local_port_t, _Timeout);
                         string authcode = null; 
                         if (auth_status.Success)
                         {
@@ -501,36 +503,8 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                             case 2006:
                                 shouldContinueAttempts = false;
                                 break;
-                            case 1003:
-                                break;
-                            case 1004:
-                                break;
-                            case 2001:
-                                break;
-                            case 2002:
-                                break;
-                            case 2003:
-                                break;
-                            case 2004:
-                                break;
-                            case 2005:
-                                break;
-                            case 3001:
-                                break;
-                            case 3002:
-                                break;
-                            case 3003:
-                                break;
-                            case 3004:
-                                break;
-                            case 3005:
-                                break;
                             default:
-                                try
-                                {
-                                    errors_list.Add(4000);
-                                }
-                                catch { }
+                                
                                 break;
                         }
 
@@ -644,7 +618,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
                
                 Console.Error.Write($"[{Login}] STEAM GUARD! Отправленно письмо с кодом на почту: {email}\n");
-                var auth_status = await mailCheckerMafile.CheckMailAsync(data_account, Imap, local_port_t);
+                var auth_status = await mailCheckerMafile.CheckMailAsync(data_account, Imap, local_port_t, _Timeout);
                 if (auth_status.Success)
                 {
                     code = auth_status.Message;
