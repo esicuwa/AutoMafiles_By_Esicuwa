@@ -9,8 +9,10 @@ using SteamKit2.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static AutoMafiles_By_Esicuwa.MafileModule.MafileAdd;
 using static AutoMafiles_By_Esicuwa.Tools.Formats_Steam;
 using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 namespace AutoMafiles_By_Esicuwa.MafileModule
@@ -23,6 +25,8 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
         private static int attempts_config = 3;
         private static string ConfigFilePath = GetExecutableDir() + "/config.json";
         private static string? folderPath;
+        static List<string> DataAccounts = new List<string>();
+
         public static async Task MafilesRemoves() {
             List<Task> tasks = new List<Task>();
 
@@ -35,17 +39,18 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
 
             folderPath = config["MaFile_Path"].ToString();
             string[] files = Directory.GetFiles(folderPath, "*.maFile");
-            List<string> DataAccounts = new List<string>();
+            List<string> DataAccounts_Maf = new List<string>();
             foreach (var file in files)
             {
-                DataAccounts.Add(File.ReadAllText(file));
+                DataAccounts_Maf.Add(File.ReadAllText(file));
             }
+            DataAccounts = File.ReadAllLines(config["Accounts_Path"].ToString()).ToList();
             proxies = File.ReadAllLines(config["Proxy_Path"].ToString()).ToList();
             semaphore = new SemaphoreSlim(config["Threads"].ToObject<int>());
             attempts_config = config["Attempts"].ToObject<int>();
 
 
-            foreach (var Account in DataAccounts)
+            foreach (var Account in DataAccounts_Maf)
             {
                 tasks.Add(MafRemove(Account));
             }
@@ -131,29 +136,93 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                             throw new CustomException($" Неверный формат прокси", 1001);
                         }
 
+                        var config = SteamConfiguration.Create(b => b
+                          .WithHttpClientFactory((httpMessage) =>
+                          {
+                              var handler = new HttpClientHandler()
+                              {
+                                  Proxy = new WebProxy($"http://127.0.0.1:{local_port_t}"),
+                                  UseProxy = true,
+                                  UseCookies = true,
+                                  CookieContainer = new CookieContainer(),
+                                  AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                              };
 
-                        // Методы обновления токенов
-                        if (!account.Session.IsRefreshTokenExpired())
+                              return new HttpClient(handler)
+                              {
+                                  Timeout = TimeSpan.FromSeconds(30)
+                              };
+                          })
+                          );
+                        SteamClient steamClient = new SteamClient(config);
+                        steamClient.Connect();
+
+                        while (!steamClient.IsConnected)
                         {
-
-                        }
-                        else
-                        {
-                            throw new CustomException($"Сессия недействительна. Обновите mafile", 4001);
-
-                        }
-
-                        if (!account.Session.IsAccessTokenExpired())
-                        {
-                            try
+                            await Task.Delay(500);
+                            errors++;
+                            if (errors == 120)
                             {
-                                await account.Session.RefreshAccessToken("127.0.0.1", local_port_t);
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new CustomException($"Ошибка обновления токена.", 4002);
+                                throw new CustomException($"Ошибка подключения к серверам steam", 3005);
                             }
                         }
+                        CredentialsAuthSession authSession = null;
+
+                        bool succ = false;
+                        string account_name = account.AccountName;
+                        foreach (var acc_data in DataAccounts) {
+                            if (acc_data.Split(":")[0] == account_name) {   
+                                
+
+                                try
+                                {
+                                    authSession = await steamClient.Authentication.BeginAuthSessionViaCredentialsAsync(new AuthSessionDetails
+                                    {
+                                        Username = acc_data.Split(":")[0],
+                                        Password = acc_data.Split(":")[1],
+                                        IsPersistentSession = false,
+                                        PlatformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
+                                        ClientOSType = EOSType.Android9,
+                                        Authenticator = new IAuthenticator()
+
+                                    });
+
+                                }
+
+                                catch (Exception ex)
+                                {
+                                    throw new CustomException($" Ошибка входа в аккаунт: {ex.Message}", 1004);
+                                }
+
+                                succ = true;
+
+
+                            }
+
+                        }
+                        if (!succ) {
+
+                            throw new CustomException($"Не найдены данные для входа в аккаунт.", 6000);
+
+
+                        }
+
+                        AuthPollResult pollResponse;
+
+                        try
+                        {
+                            pollResponse = await authSession.PollingWaitForResultAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new CustomException($"Ошибка при получении данных: {ex.Message}", 2001);
+                        }
+                        
+                        account.Session.AccessToken = pollResponse.AccessToken;
+                        // account.Session.RefreshToken = pollResponse.RefreshToken; /////
+
+
+                       
 
                         bool success = await account.DeactivateAuthenticator(2, "127.0.0.1", local_port_t);
 
