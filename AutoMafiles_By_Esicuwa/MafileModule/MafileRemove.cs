@@ -311,7 +311,6 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
         
 
 
-
         /// <inheritdoc />
         public Task<string> GetDeviceCodeAsync(bool previousCodeWasIncorrect)
         {

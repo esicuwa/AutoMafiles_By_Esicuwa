@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md)
 [![Русский](https://img.shields.io/badge/Язык-Русский-red)](README_RU.md)
 
-Автоматизированная программа для массовой привязки мобильного аутентификатора к аккаунтам Steam.
+Программа для автоматического массового управления мобильными аутентификаторами для аккаунтов Steam.
 
 ## Описание
 
@@ -48,7 +48,8 @@
     "Format": 0,
     "Proxy_Path": "C:\\path\\to\\proxies.txt",
     "Accounts_Path": "C:\\path\\to\\accounts.txt",
-    "MaFile_Path": "C:\\path\\to\\maFiles"
+    "MaFile_Path": "C:\\path\\to\\maFiles",
+    "Timeout": 1
 
 }
 ```
@@ -63,8 +64,9 @@
 - **Proxy_Path** - путь к файлу с прокси-серверами
 - **Accounts_Path** - путь к файлу с аккаунтами
 - **MaFile_Path** - путь к папке с mafile
+- **Timeout** - максимальное время получения письма в минутах
 
-Для отмены привязки mafiles вам понадобятся только maFile_Path и Proxy_Path, если указан тип 1.
+Чтобы отключить mafiles, вам понадобятся maFile_Path с путем до maFiles, Accounts_Path с форматом log:pass аккаунтов steam и Proxy_Path, при указании типа 1.
 
 После отмены привязки мобильный аутентификатор будет удалён, а вместо него будет установлен аутентификатор электронной почты.
 

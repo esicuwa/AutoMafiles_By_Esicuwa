@@ -3,7 +3,7 @@
 [![English](https://img.shields.io/badge/Language-English-blue)](README.md)
 [![Русский](https://img.shields.io/badge/Язык-Русский-red)](README_RU.md)
 
-Automated program for mass binding of mobile authenticator to Steam accounts.
+The program automatically for mass management of mobile authenticators for Steam accounts.
 
 ## Description
 
@@ -48,7 +48,8 @@ Configuration is done through the `config.json` file in the program folder:
     "Format": 0,
     "Proxy_Path": "C:\\path\\to\\proxies.txt",
     "Accounts_Path": "C:\\path\\to\\accounts.txt",
-    "MaFile_Path": "C:\\path\\to\\maFiles"
+    "MaFile_Path": "C:\\path\\to\\maFiles",
+	"Timeout": 1
 }
 ```
 
@@ -62,8 +63,10 @@ Configuration is done through the `config.json` file in the program folder:
 - **Proxy_Path** - path to proxy servers file
 - **Accounts_Path** - path to accounts file
 - **MaFile_Path** - path to Mafile fouder
+- **Timeout** - maximum time to receive a letter in minutes
 
-To unlink mafiles, you only need the maFile_Path and Proxy_Path when Type 1 is specified.
+
+To disable mafiles, you will need maFile_Path with the path to mafile, Accounts_Path with the log:pass format of Steam accounts, and Proxy_Path, if you specify type 1.
 
 After unlinking, the mobile authenticator will be removed and an email authenticator will be installed.
 
