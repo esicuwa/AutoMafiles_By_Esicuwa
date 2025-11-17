@@ -26,6 +26,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
         private static string ConfigFilePath = GetExecutableDir() + "/config.json";
         private static string? folderPath;
         static List<string> DataAccounts = new List<string>();
+        private static string[] Files;
 
         public static async Task MafilesRemoves() {
             List<Task> tasks = new List<Task>();
@@ -36,21 +37,15 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
             }
             string jsonContent = File.ReadAllText(ConfigFilePath);
             JObject config = JObject.Parse(jsonContent);
-
             folderPath = config["MaFile_Path"].ToString();
-            string[] files = Directory.GetFiles(folderPath, "*.maFile");
-            List<string> DataAccounts_Maf = new List<string>();
-            foreach (var file in files)
-            {
-                DataAccounts_Maf.Add(File.ReadAllText(file));
-            }
-            DataAccounts = File.ReadAllLines(config["Accounts_Path"].ToString()).ToList();
+            Files = Directory.GetFiles(folderPath, "*.mafile");
+            List<string> DataAccounts = File.ReadAllLines(config["Accounts_Path"].ToString()).ToList();
             proxies = File.ReadAllLines(config["Proxy_Path"].ToString()).ToList();
             semaphore = new SemaphoreSlim(config["Threads"].ToObject<int>());
             attempts_config = config["Attempts"].ToObject<int>();
 
 
-            foreach (var Account in DataAccounts_Maf)
+            foreach (var Account in DataAccounts)
             {
                 tasks.Add(MafRemove(Account));
             }
@@ -84,13 +79,35 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
             {
                 while (attempts < attempts_config)
                 {
-                    var account = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(Account);
+                    string[] account = Account.Split(":");
+                    //var account = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(Account);
 
                     int errors = 0;
                     var cts = new CancellationTokenSource();
 
                     try
                     {
+
+
+                        string foundFile = null;
+                        foreach (var file in Files)
+                        {
+                            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(file);
+                            if (string.Equals(fileNameWithoutExt, account[0], StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Console.WriteLine($"Файл найден: {file}");
+                                foundFile = file;
+                                break;
+                            }
+                        }
+                        if (foundFile == null)
+                        {
+                            Console.WriteLine($"Ошибка: .mafile для аккаунта {account[0]} не найден.");
+                            return;
+                        }
+
+                        var MafData = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(File.ReadAllText(foundFile));
+
                         if (proxies.Count == 0)
                         {
                             Console.WriteLine($" Нет доступных прокси. Ожидание...");
@@ -169,7 +186,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                         CredentialsAuthSession authSession = null;
 
                         bool succ = false;
-                        string account_name = account.AccountName;
+                        string account_name = MafData.AccountName;
                         foreach (var acc_data in DataAccounts) {
                             if (acc_data.Split(":")[0] == account_name) {   
                                 
@@ -183,7 +200,7 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                                         IsPersistentSession = false,
                                         PlatformType = EAuthTokenPlatformType.k_EAuthTokenPlatformType_MobileApp,
                                         ClientOSType = EOSType.Android9,
-                                        Authenticator = new UserAuthenticator(account.SharedSecret)
+                                        Authenticator = new UserAuthenticator(MafData.SharedSecret)
 
                                     });
 
@@ -217,19 +234,19 @@ namespace AutoMafiles_By_Esicuwa.MafileModule
                         {
                             throw new CustomException($"Ошибка при получении данных: {ex.Message}", 2001);
                         }
-                        
-                        account.Session.AccessToken = pollResponse.AccessToken;
+
+                        MafData.Session.AccessToken = pollResponse.AccessToken;
                         // account.Session.RefreshToken = pollResponse.RefreshToken; /////
 
 
                        
 
-                        bool success = await account.DeactivateAuthenticator(2, "127.0.0.1", local_port_t);
+                        bool success = await MafData.DeactivateAuthenticator(2, "127.0.0.1", local_port_t);
 
                         if (success)
                         {
 
-                            string FileName = account.AccountName;
+                            string FileName = MafData.AccountName;
                             string filePath = Path.Combine(folderPath, $"{FileName}.maFile");
                             File.Delete(filePath);
                             Console.WriteLine("Аунтификатор удален");
