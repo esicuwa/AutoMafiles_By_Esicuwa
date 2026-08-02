@@ -165,7 +165,7 @@ login:password:email:refresh_token:client_id
 
 esicuwa
 
-особая благодарность каналу [svinofermacs2](https://t.me/svinofermacs2) за продвижение репозитория
+
 
 ## Donate
 
